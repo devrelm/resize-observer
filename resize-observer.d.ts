@@ -1,5 +1,7 @@
 export interface ResizeObserver {
     constructor(callback: ResizeObserverCallback);
+    observationTargets: ResizeObservation[];
+    activeTargets: ResizeObservation[];
     observe(target: Element): void;
     unobserve(target: Element): void;
     disconnect(): void;
