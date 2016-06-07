@@ -1,0 +1,24 @@
+{
+  "name": "resize-observer",
+  "version": "0.0.1",
+  "description": "An implementation and polyfill of the Resize Observer draft.",
+  "main": "resize-observer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pelotoncycle/resize-observer.git"
+  },
+  "keywords": [
+    "ResizeObserver",
+    "polyfill",
+    "element-resize"
+  ],
+  "author": "Mike Deverell <mike@pelotoncycle.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/pelotoncycle/resize-observer/issues"
+  },
+  "homepage": "https://github.com/pelotoncycle/resize-observer#readme"
+}
