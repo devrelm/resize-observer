@@ -1,137 +1,156 @@
-if (!document.resizeObservers) {
-    document.resizeObservers = [];
-}
+(function(window, undefined) {
+    "use strict";
 
-export class ResizeObserver {
-    constructor(callback) {
-        document.resizeObservers.push(this);
-        this._callback = callback;
-        this._observationTargets = [];
-        this._activeTargets = [];
+    if (window.ResizeObserver !== undefined) {
+        return;
     }
 
-    observe(target) {
-        let resizeObservationIndex = this._observationTargets.findIndex(ro => ro.target === target);
+    document.resizeObservers = [];
+    window.ResizeObserver = ResizeObserver;
+    setFrameWait(frameHandler);
+
+    function ResizeObserver(callback) {
+        document.resizeObservers.push(this);
+        this.__callback = callback;
+        this.__observationTargets = [];
+        this.__activeTargets = [];
+    }
+
+    ResizeObserver.prototype.observe = function(target) {
+        var resizeObservationIndex = findtargetIndex(this.__observationTargets, target);
         if (typeof resizeObservation >= 0) {
             return;
         }
 
         resizeObservation = new ResizeObservation(target);
-        this._observationTargets.push(resizeObservation);
-    }
+        this.__observationTargets.push(resizeObservation);
+    };
 
-    unobserve(target) {
-        let resizeObservationIndex = this._observationTargets.findIndex(ro => ro.target === target);
+    ResizeObserver.prototype.unobserve = function(target) {
+        var resizeObservationIndex = findtargetIndex(this.__observationTargets, target);
         if (resizeObservationIndex === -1) {
             return;
         }
 
-        this._observationTargets.splice(resizeObservationIndex, 1);
-    }
+        this.__observationTargets.splice(resizeObservationIndex, 1);
+    };
 
-    disconnect() {
-        this._observationTargets = [];
-        this._activeTargets = [];
-    }
+    ResizeObserver.prototype.disconnect = function() {
+        this.__observationTargets = [];
+        this.__activeTargets = [];
+    };
 
-    _populateActiveTargets() {
-        this._activeTargets = [];
-        for (let resizeObservation of this._observationTargets) {
+    ResizeObserver.prototype.__populateActiveTargets = function() {
+        this.__activeTargets = [];
+        for (var key in this.__observationTargets) {
+            var resizeObservation = this.__observationTargets[key];
             if (resizeObservation.isActive()) {
-                this._activeTargets.push(resizeObservation);
+                this.__activeTargets.push(resizeObservation);
             }
         }
-    }
-}
+    };
 
-export class ResizeObserverEntry {
-    constructor(target) {
-        this._target = target;
-        this._clientWidth = target.getBoundingClientRect().width;
-        this._clientHeight = target.getBoundingClientRect().height;
+    function ResizeObserverEntry(target) {
+        this.__target = target;
+        this.__clientWidth = getWidth(target);
+        this.__clientHeight = getHeight(target);
     }
 
-    get target() {
-        return this._target;
+    ResizeObserverEntry.target = function() {
+        return this.__target;
+    };
+
+    ResizeObserverEntry.clientWidth = function() {
+        return this.__clientWidth();
+    };
+
+    ResizeObserverEntry.clientHeight = function() {
+        return this.__clientHeight();
+    };
+
+    function ResizeObservation(target) {
+        this.__target = target;
+        this.__lastBroadcastWidth = getWidth(target);
+        this.__lastBroadcastHeight = getHeight(target);
     }
 
-    get clientWidth() {
-        return this._clientWidth();
-    }
+    ResizeObservation.prototype.target = function() {
+        return this.__target;
+    };
 
-    get clientHeight() {
-        return this._clientHeight();
-    }
-}
+    ResizeObservation.prototype.lastBroadcastWidth = function() {
+        return this.__lastBroadcastWidth;
+    };
 
-class ResizeObservation {
-    constructor(target) {
-        this._target = target;
-        this._lastBroadcastWidth = target.getBoundingClientRect().width;
-        this._lastBroadcastHeight = target.getBoundingClientRect().height;
-    }
+    ResizeObservation.prototype.lastBroadcastHeight = function() {
+        return this.__lastBroadcastHeight;
+    };
 
-    get target() {
-        return this._target;
-    }
-
-    get lastBroadcastWidth() {
-        return this._lastBroadcastWidth;
-    }
-
-    get lastBroadcastHeight() {
-        return this._lastBroadcastHeight;
-    }
-
-    isActive() {
-        if (this.target.getBoundingClientRect().width !== this.lastBroadcastWidth ||
-            this.target.getBoundingClientRect().height !== this.lastBroadcastHeight) {
+    ResizeObservation.prototype.isActive = function() {
+        if (getWidth(this.target) !== this.lastBroadcastWidth ||
+            getHeight(this.target) !== this.lastBroadcastHeight) {
             return true;
         }
         return false;
-    }
-}
+    };
 
-
-function gatherActiveObservers() {
-    for (let resizeObserver of document.resizeObservers) {
-        resizeObserver._populateActiveTargets();
-    }
-}
-
-function hasActiveObservations() {
-    for (let resizeObserver of document.resizeObservers) {
-        if (resizeObserver._activeTargets.length > 0) {
-            return true;
+    function findtargetIndex(collection, target) {
+        for (var index = 0; index < collection.length; index += 1) {
+            if (collection[index].target === target) {
+                return index;
+            }
         }
     }
-    return false;
-}
 
-function broadcastActiveObservations() {
-    for (let resizeObserver of document.resizeObservers) {
-        const entries = [];
-
-        for (let resizeObservation of resizeObserver._activeTargets) {
-            const entry = new ResizeObserverEntry(resizeObservation.target);
-            entries.push(entry);
-            resizeObservation._lastBroadcastWidth =
-                resizeObservation.target.getBoundingClientRect().width;
-            resizeObservation._lastBroadcastHeight =
-                resizeObservation.target.getBoundingClientRect().height;
-        }
-
-        resizeObserver._callback(entries);
-        resizeObserver._activeTargets = [];
+    function getWidth(target) {
+        return target.getBoundingClientRect().width;
     }
-}
 
-function deliverResizeLimitErrorNotification() {
-    const errorEvent = new ErrorEvent('ResizeObserver loop limit exceeded.');
-    window.dispatch(errorEvent);
-}
+    function getHeight(target) {
+        return target.getBoundingClientRect().height;
+    }
 
-function frameHandler() {
-    gatherActiveObservers();
-    broadcastActiveObservations();
-}
+    function gatherActiveObservers() {
+        for (var index = 0; index < document.resizeObservers.length; index += 1) {
+            document.resizeObservers[index].__populateActiveTargets();
+        }
+    }
+
+    function broadcastActiveObservations() {
+        for (var roIndex = 0; roIndex < document.resizeObservers; roIndex++) {
+            var resizeObserver = document.resizeObservers[roIndex];
+            if (resizeObserver.__activeTargets.length === 0) {
+                continue;
+            }
+
+            var entries = [];
+
+            for (var atIndex = 0; atIndex < resizeObserver.__activeTargets.length; atIndex += 1) {
+                var resizeObservation = resizeObserver.__activeTargets[atIndex];
+                var entry = new ResizeObserverEntry(resizeObservation.target);
+                entries.push(entry);
+                resizeObservation.__lastBroadcastWidth = getWidth(resizeObservation.target);
+                resizeObservation.__lastBroadcastHeight = getHeight(resizeObservation.target);
+            }
+
+            resizeObserver.__callback(entries);
+            resizeObserver.__activeTargets = [];
+        }
+    }
+
+    function frameHandler() {
+        gatherActiveObservers();
+        broadcastActiveObservations();
+
+        setFraimWait(frameHandler);
+    }
+
+    function setFrameWait(callback) {
+        if (window.requestAnimationFrame === undefined) {
+            window.setInterval(callback, 1000 / 60);
+        } else {
+            window.requestAnimationFrame(callback);
+        }
+    }
+
+})(window, document);
