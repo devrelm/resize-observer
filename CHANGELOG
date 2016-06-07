@@ -1,0 +1,13 @@
+# Change Log
+All notable changes to this project will be documented in this file.
+
+This project adheres to [Semantic Versioning](http://semver.org/).
+All minor versions less than 1.0.0 are breaking changes.
+
+## 0.0.1 - 2016-06-07
+### Added
+- base untested resize-observer
+- resize-observer typescript definition file
+- readme
+- license
+- npm package
