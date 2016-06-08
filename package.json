@@ -4,7 +4,7 @@
   "description": "An implementation and polyfill of the Resize Observer draft.",
   "main": "resize-observer.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,13 @@
   "bugs": {
     "url": "https://github.com/pelotoncycle/resize-observer/issues"
   },
-  "homepage": "https://github.com/pelotoncycle/resize-observer#readme"
+  "homepage": "https://github.com/pelotoncycle/resize-observer#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "jsdom": "^9.2.1",
+    "mocha": "^2.5.3",
+    "mock-browser": "^0.92.12",
+    "mock-raf": "0.0.2",
+    "sinon": "^1.17.4"
+  }
 }

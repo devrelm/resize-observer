@@ -1,13 +1,12 @@
 (function(window, undefined) {
     "use strict";
 
-    if (window.ResizeObserver !== undefined) {
+    if (typeof window.ResizeObserver !== 'undefined') {
         return;
     }
 
     document.resizeObservers = [];
     window.ResizeObserver = ResizeObserver;
-    setFrameWait(frameHandler);
 
     function ResizeObserver(callback) {
         document.resizeObservers.push(this);
@@ -17,7 +16,7 @@
     }
 
     ResizeObserver.prototype.observe = function(target) {
-        var resizeObservationIndex = findtargetIndex(this.__observationTargets, target);
+        var resizeObservationIndex = findTargetIndex(this.__observationTargets, target);
         if (typeof resizeObservation >= 0) {
             return;
         }
@@ -27,7 +26,7 @@
     };
 
     ResizeObserver.prototype.unobserve = function(target) {
-        var resizeObservationIndex = findtargetIndex(this.__observationTargets, target);
+        var resizeObservationIndex = findTargetIndex(this.__observationTargets, target);
         if (resizeObservationIndex === -1) {
             return;
         }
@@ -94,7 +93,7 @@
         return false;
     };
 
-    function findtargetIndex(collection, target) {
+    function findTargetIndex(collection, target) {
         for (var index = 0; index < collection.length; index += 1) {
             if (collection[index].target === target) {
                 return index;
@@ -146,11 +145,12 @@
     }
 
     function setFrameWait(callback) {
-        if (window.requestAnimationFrame === undefined) {
+        if (typeof window.requestAnimationFrame === 'undefined') {
             window.setInterval(callback, 1000 / 60);
         } else {
             window.requestAnimationFrame(callback);
         }
     }
 
+    setFrameWait(frameHandler);
 })(window, document);
