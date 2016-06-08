@@ -17,11 +17,11 @@
 
     ResizeObserver.prototype.observe = function(target) {
         var resizeObservationIndex = findTargetIndex(this.__observationTargets, target);
-        if (typeof resizeObservation >= 0) {
+        if (resizeObservationIndex >= 0) {
             return;
         }
 
-        resizeObservation = new ResizeObservation(target);
+        var resizeObservation = new ResizeObservation(target);
         this.__observationTargets.push(resizeObservation);
     };
 
@@ -86,8 +86,8 @@
     };
 
     ResizeObservation.prototype.isActive = function() {
-        if (getWidth(this.target) !== this.lastBroadcastWidth ||
-            getHeight(this.target) !== this.lastBroadcastHeight) {
+        if (getWidth(this.__target) !== this.lastBroadcastWidth ||
+            getHeight(this.__target) !== this.lastBroadcastHeight) {
             return true;
         }
         return false;
@@ -95,7 +95,7 @@
 
     function findTargetIndex(collection, target) {
         for (var index = 0; index < collection.length; index += 1) {
-            if (collection[index].target === target) {
+            if (collection[index].target() === target) {
                 return index;
             }
         }
@@ -116,7 +116,7 @@
     }
 
     function broadcastActiveObservations() {
-        for (var roIndex = 0; roIndex < document.resizeObservers; roIndex++) {
+        for (var roIndex = 0; roIndex < document.resizeObservers.length; roIndex++) {
             var resizeObserver = document.resizeObservers[roIndex];
             if (resizeObserver.__activeTargets.length === 0) {
                 continue;
@@ -126,10 +126,10 @@
 
             for (var atIndex = 0; atIndex < resizeObserver.__activeTargets.length; atIndex += 1) {
                 var resizeObservation = resizeObserver.__activeTargets[atIndex];
-                var entry = new ResizeObserverEntry(resizeObservation.target);
+                var entry = new ResizeObserverEntry(resizeObservation.target());
                 entries.push(entry);
-                resizeObservation.__lastBroadcastWidth = getWidth(resizeObservation.target);
-                resizeObservation.__lastBroadcastHeight = getHeight(resizeObservation.target);
+                resizeObservation.__lastBroadcastWidth = getWidth(resizeObservation.target());
+                resizeObservation.__lastBroadcastHeight = getHeight(resizeObservation.target());
             }
 
             resizeObserver.__callback(entries);
@@ -141,7 +141,7 @@
         gatherActiveObservers();
         broadcastActiveObservations();
 
-        setFraimWait(frameHandler);
+        setFrameWait(frameHandler);
     }
 
     function setFrameWait(callback) {

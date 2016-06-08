@@ -11,7 +11,6 @@ describe('ResizeObserver', () => {
         global.document = MockBrowser.createDocument();
 
         window.requestAnimationFrame = mockRaf.raf;
-        window._mockRaf = mockRaf;
         rafStub = sinon.stub(window, 'requestAnimationFrame', mockRaf.raf);
         require('../resize-observer');
     });
@@ -37,6 +36,25 @@ describe('ResizeObserver', () => {
         it('adds the new ResizeObserver to document.resizeObservers', () => {
             const ro = new window.ResizeObserver();
             expect(document.resizeObservers.length).to.equal(1);
+        });
+    });
+
+    describe('observe', () => {
+        it('watches the element for height changes', () => {
+            const element = document.createElement('div');
+            element.style.height = '0px';
+            document.body.appendChild(element);
+            const callback = sinon.spy();
+            const ro = new window.ResizeObserver(callback);
+
+            ro.observe(element);
+
+            expect(callback.called).to.equal(false);
+
+            element.style.height = '10px';
+            mockRaf.step();
+
+            expect(callback.called).to.equal(true);
         });
     });
 });
