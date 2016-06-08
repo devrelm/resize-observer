@@ -86,8 +86,8 @@
     };
 
     ResizeObservation.prototype.isActive = function() {
-        if (getWidth(this.__target) !== this.lastBroadcastWidth ||
-            getHeight(this.__target) !== this.lastBroadcastHeight) {
+        if (getWidth(this.__target) !== this.lastBroadcastWidth() ||
+            getHeight(this.__target) !== this.lastBroadcastHeight()) {
             return true;
         }
         return false;

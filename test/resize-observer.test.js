@@ -39,22 +39,57 @@ describe('ResizeObserver', () => {
         });
     });
 
-    describe('observe', () => {
-        it('watches the element for height changes', () => {
-            const element = document.createElement('div');
-            element.style.height = '0px';
+    describe('when observing an element', () => {
+        let element;
+        let callback;
+        let elementWidth;
+        let elementHeight;
+
+        beforeEach(() => {
+            element = document.createElement('div');
+            elementWidth = 0;
+            elementHeight = 0;
+            mockGbcr = sinon.stub(element, 'getBoundingClientRect', () => {
+                return {
+                    width: elementWidth,
+                    height: elementHeight
+                };
+            });
             document.body.appendChild(element);
-            const callback = sinon.spy();
+            callback = sinon.spy();
             const ro = new window.ResizeObserver(callback);
 
             ro.observe(element);
+        });
 
+        it('watches the element for height changes', () => {
             expect(callback.called).to.equal(false);
 
-            element.style.height = '10px';
+            elementHeight = 10;
             mockRaf.step();
 
             expect(callback.called).to.equal(true);
+        });
+
+        it('watches the element for width changes', () => {
+            expect(callback.called).to.equal(false);
+
+            elementWidth = 10;
+            mockRaf.step();
+
+            expect(callback.called).to.equal(true);
+        });
+
+        it('does not dispatch when width and height do not change', () => {
+            expect(callback.called).to.equal(false);
+
+            mockRaf.step();
+
+            expect(callback.called).to.equal(false);
+
+            mockRaf.step();
+
+            expect(callback.called).to.equal(false);
         });
     });
 });
