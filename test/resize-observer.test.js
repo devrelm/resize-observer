@@ -4,14 +4,12 @@ const mockRaf = require('mock-raf')();
 const sinon = require('sinon');
 
 describe('ResizeObserver', () => {
-	let rafStub;
-
     beforeEach(() => {
         global.window = MockBrowser.createWindow();
         global.document = MockBrowser.createDocument();
 
         window.requestAnimationFrame = mockRaf.raf;
-        rafStub = sinon.stub(window, 'requestAnimationFrame', mockRaf.raf);
+        sinon.stub(window, 'requestAnimationFrame', mockRaf.raf);
         require('../resize-observer');
     });
 
@@ -39,7 +37,7 @@ describe('ResizeObserver', () => {
         });
     });
 
-    describe('when observing an element', () => {
+    describe('when observing one element', () => {
         let element;
         let callback;
         let elementWidth;
@@ -83,13 +81,35 @@ describe('ResizeObserver', () => {
         it('does not dispatch when width and height do not change', () => {
             expect(callback.called).to.equal(false);
 
-            mockRaf.step();
-
-            expect(callback.called).to.equal(false);
+            elementWidth = 10;
 
             mockRaf.step();
 
+            expect(callback.calledOnce).to.equal(true);
+
+            mockRaf.step();
+
+            expect(callback.calledOnce).to.equal(true);
+
+            mockRaf.step();
+
+            expect(callback.calledOnce).to.equal(true);
+        });
+
+        it('dispatches the callback once per requestAnimationFrame', () => {
             expect(callback.called).to.equal(false);
+
+            elementWidth = 10;
+
+            mockRaf.step();
+
+            expect(callback.calledOnce).to.equal(true);
+
+            elementWidth = 20;
+
+            mockRaf.step();
+
+            expect(callback.calledTwice).to.equal(true);
         });
     });
 });
