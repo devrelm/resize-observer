@@ -3,7 +3,7 @@ const MockBrowser = require('mock-browser').mocks.MockBrowser;
 const mockRaf = require('mock-raf')();
 const sinon = require('sinon');
 
-describe('ResizeObserver', () => {
+describe('One ResizeObserver', () => {
     beforeEach(() => {
         global.window = MockBrowser.createWindow();
         global.document = MockBrowser.createDocument();
@@ -47,7 +47,7 @@ describe('ResizeObserver', () => {
             element = document.createElement('div');
             elementWidth = 0;
             elementHeight = 0;
-            mockGbcr = sinon.stub(element, 'getBoundingClientRect', () => {
+            sinon.stub(element, 'getBoundingClientRect', () => {
                 return {
                     width: elementWidth,
                     height: elementHeight
@@ -110,6 +110,67 @@ describe('ResizeObserver', () => {
             mockRaf.step();
 
             expect(callback.calledTwice).to.equal(true);
+        });
+    });
+
+    describe('when observing two elements', () => {
+        let callback;
+        let elements;
+        let elementWidths;
+        let elementHeights;
+
+        beforeEach(() => {
+            elements = [];
+            elementWidths = [];
+            elementHeights = [];
+            elements[0] = document.createElement('div');
+            elements[1] = document.createElement('div');
+            elementWidths[0] = elementWidths[1] = 0;
+            elementHeights[0] = elementHeights[1] = 0;
+
+            callback = sinon.spy();
+            const ro = new window.ResizeObserver(callback);
+
+            elements.forEach((el, index) => {
+                sinon.stub(el, 'getBoundingClientRect', () => {
+                    return {
+                        width: elementWidths[index],
+                        height: elementHeights[index]
+                    };
+                });
+                document.body.appendChild(el);
+                ro.observe(el);
+            });
+
+        });
+
+        it('calls the callback when either element\'s size has changed', () => {
+            expect(callback.called).to.equal(false);
+
+            elementWidths[0] = 10;
+            mockRaf.step();
+
+            expect(callback.calledOnce).to.equal(true);
+
+            elementWidths[1] = 10;
+            mockRaf.step();
+
+            expect(callback.calledTwice).to.equal(true);
+        });
+
+        it('calls the callback once when both elements\' sizes have changed', () => {
+            expect(callback.called).to.equal(false);
+
+            elementWidths[0] = 10;
+            elementWidths[1] = 10;
+
+            mockRaf.step();
+
+            expect(callback.calledOnce).to.equal(true);
+
+            mockRaf.step();
+
+            expect(callback.calledOnce).to.equal(true);
         });
     });
 });
