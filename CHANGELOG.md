@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 All minor versions less than 1.0.0 are breaking changes.
 
-## [Unreleased]
+## 0.0.2 - 2016-06-08
 ### Added
 - tests using mocha, chai, mock-browser, mock-raf
 
