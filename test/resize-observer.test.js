@@ -42,12 +42,14 @@ describe('One ResizeObserver', () => {
         let callback;
         let elementWidth;
         let elementHeight;
+        let resizeObserver;
+        let mockGbcr;
 
         beforeEach(() => {
             element = document.createElement('div');
             elementWidth = 0;
             elementHeight = 0;
-            sinon.stub(element, 'getBoundingClientRect', () => {
+            mockGbcr = sinon.stub(element, 'getBoundingClientRect', () => {
                 return {
                     width: elementWidth,
                     height: elementHeight
@@ -55,9 +57,9 @@ describe('One ResizeObserver', () => {
             });
             document.body.appendChild(element);
             callback = sinon.spy();
-            const ro = new window.ResizeObserver(callback);
+            resizeObserver = new window.ResizeObserver(callback);
 
-            ro.observe(element);
+            resizeObserver.observe(element);
         });
 
         it('watches the element for height changes', () => {
@@ -111,6 +113,23 @@ describe('One ResizeObserver', () => {
 
             expect(callback.calledTwice).to.equal(true);
         });
+
+        describe('after unobserve', () => {
+            beforeEach(() => {
+                resizeObserver.unobserve(element);
+            });
+
+            it('no longer dispatches when the element resizes', () => {
+                elementWidth = 10;
+                elementHeight = 10;
+
+                mockGbcr.reset();
+                mockRaf.step();
+
+                expect(callback.called).to.equal(false);
+                expect(mockGbcr.called).to.equal(false);
+            });
+        });
     });
 
     describe('when observing two elements', () => {
@@ -118,28 +137,31 @@ describe('One ResizeObserver', () => {
         let elements;
         let elementWidths;
         let elementHeights;
+        let mockGbcrs;
+        let resizeObserver;
 
         beforeEach(() => {
             elements = [];
             elementWidths = [];
             elementHeights = [];
+            mockGbcrs = [];
             elements[0] = document.createElement('div');
             elements[1] = document.createElement('div');
             elementWidths[0] = elementWidths[1] = 0;
             elementHeights[0] = elementHeights[1] = 0;
 
             callback = sinon.spy();
-            const ro = new window.ResizeObserver(callback);
+            resizeObserver = new window.ResizeObserver(callback);
 
             elements.forEach((el, index) => {
-                sinon.stub(el, 'getBoundingClientRect', () => {
+                mockGbcrs[index] = sinon.stub(el, 'getBoundingClientRect', () => {
                     return {
                         width: elementWidths[index],
                         height: elementHeights[index]
                     };
                 });
                 document.body.appendChild(el);
-                ro.observe(el);
+                resizeObserver.observe(el);
             });
 
         });
@@ -171,6 +193,66 @@ describe('One ResizeObserver', () => {
             mockRaf.step();
 
             expect(callback.calledOnce).to.equal(true);
+        });
+
+        describe('after unobserving the first element', () => {
+            beforeEach(() => {
+                resizeObserver.unobserve(elements[0]);
+            });
+
+            it('stops observing that element', () => {
+                elementWidths[0] = 10;
+                elementHeights[0] = 10;
+
+                mockGbcrs[0].reset();
+                mockGbcrs[1].reset();
+                mockRaf.step();
+
+                expect(callback.called).to.equal(false);
+                expect(mockGbcrs[0].called).to.equal(false);
+            });
+
+            it('still observes the second element', () => {
+                elementWidths[1] = 10;
+                elementHeights[1] = 10;
+
+                mockGbcrs[0].reset();
+                mockGbcrs[1].reset();
+                mockRaf.step();
+
+                expect(callback.called).to.equal(true);
+                expect(mockGbcrs[1].called).to.equal(true);
+            });
+        });
+
+        describe('after unobserving the second element', () => {
+            beforeEach(() => {
+                resizeObserver.unobserve(elements[1]);
+            });
+
+            it('stops observing that element', () => {
+                elementWidths[1] = 10;
+                elementHeights[1] = 10;
+
+                mockGbcrs[0].reset();
+                mockGbcrs[1].reset();
+                mockRaf.step();
+
+                expect(callback.called).to.equal(false);
+                expect(mockGbcrs[1].called).to.equal(false);
+            });
+
+            it('still observes the first element', () => {
+                elementWidths[0] = 10;
+                elementHeights[0] = 10;
+
+                mockGbcrs[0].reset();
+                mockGbcrs[1].reset();
+                mockRaf.step();
+
+                expect(callback.called).to.equal(true);
+                expect(mockGbcrs[0].called).to.equal(true);
+            });
         });
     });
 });
