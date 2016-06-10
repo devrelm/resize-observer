@@ -10,6 +10,7 @@ All minor versions less than 1.0.0 are breaking changes.
 
 ### Fixed
 - Removed erroneous `[` from Typescript definition file
+- Improved Typescript definition file to more closely describe the interface
 
 ## [0.0.2] - 2016-06-08
 ### Added
