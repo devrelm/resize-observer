@@ -6,7 +6,7 @@ export interface ResizeObserver {
     unobserve(target: Element): void;
     disconnect(): void;
 }
-]
+
 export interface ResizeObserverCallback {
     (entries: ResizeObserverEntry[], observer: ResizeObserver): void;
 }

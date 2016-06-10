@@ -8,6 +8,9 @@ All minor versions less than 1.0.0 are breaking changes.
 ### Changed
 - Updated CHANGELOG with links to diffs
 
+### Fixed
+- Removed erroneous `[` from Typescript definition file
+
 ## [0.0.2] - 2016-06-08
 ### Added
 - tests using mocha, chai, mock-browser, mock-raf
