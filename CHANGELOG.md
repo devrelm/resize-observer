@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 All minor versions less than 1.0.0 are breaking changes.
 
-## [0.0.3]
+## [0.0.3] - 2016-06-10
 ### Changed
 - Updated CHANGELOG with links to diffs
 
