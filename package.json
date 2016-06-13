@@ -4,7 +4,10 @@
   "description": "An implementation and polyfill of the Resize Observer draft.",
   "main": "resize-observer.js",
   "scripts": {
-    "test": "mocha"
+    "test": "npm run lint && mocha",
+    "test-cov": "istanbul cover _mocha",
+    "lint": "eslint resize-observer.js tests/ && echo Lint passed.",
+    "coveralls": "npm run test-cov -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -23,8 +26,12 @@
   "homepage": "https://github.com/pelotoncycle/resize-observer#readme",
   "devDependencies": {
     "chai": "^3.5.0",
+    "coveralls": "^2.11.9",
+    "eslint": "^2.12.0",
+    "istanbul": "^0.4.3",
     "jsdom": "^9.2.1",
     "mocha": "^2.5.3",
+    "mocha-lcov-reporter": "^1.2.0",
     "mock-browser": "^0.92.12",
     "mock-raf": "0.0.2",
     "sinon": "^1.17.4"
