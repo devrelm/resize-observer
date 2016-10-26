@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 All minor versions less than 1.0.0 are breaking changes.
 
+## [0.0.4] - 2016-10-26
+### Fixed
+- Use `setTimeout` instead of `setInterval` for fallback when `requestAnimationFrame` doesn't exist
+
 ## [0.0.3] - 2016-06-10
 ### Changed
 - Updated CHANGELOG with links to diffs
@@ -29,5 +33,6 @@ All minor versions less than 1.0.0 are breaking changes.
 - license
 - npm package
 
+[0.0.4]: https://github.com/pelotoncycle/resize-observer/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/pelotoncycle/resize-observer/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/pelotoncycle/resize-observer/compare/v0.0.1...v0.0.2
