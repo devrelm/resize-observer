@@ -146,7 +146,7 @@
 
     function setFrameWait(callback) {
         if (typeof window.requestAnimationFrame === 'undefined') {
-            window.setInterval(callback, 1000 / 60);
+            window.setTimeout(callback, 1000 / 60);
         } else {
             window.requestAnimationFrame(callback);
         }
