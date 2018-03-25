@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 All minor versions less than 1.0.0 are breaking changes.
 
+## [0.1.0] - 2018-03-25
+### Fixed
+- `new ResizeObserver`, `ResizeObserver.prototype.observe`, and , `ResizeObserver.prototype.unobserve` should throw a `TypeError` when called with no arguments or the wrong argument type.
+
 ## [0.0.4] - 2016-10-26
 ### Fixed
 - Use `setTimeout` instead of `setInterval` for fallback when `requestAnimationFrame` doesn't exist
