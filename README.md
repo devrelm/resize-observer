@@ -1,6 +1,6 @@
 # resize-observer
 
-[![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url]
+[![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![NPM Version][npm-image]][npm-url]
 
 This library aims to be a faithful implementation and polyfill of the
 [Resize Observer draft](https://wicg.github.io/ResizeObserver/).
@@ -10,6 +10,9 @@ This library aims to be a faithful implementation and polyfill of the
 
 [coveralls-image]: https://coveralls.io/repos/github/pelotoncycle/resize-observer/badge.svg?branch=master
 [coveralls-url]: https://coveralls.io/github/pelotoncycle/resize-observer?branch=master
+
+[npm-image]: https://img.shields.io/npm/v/resize-observer.svg
+[npm-url]: https://www.npmjs.com/package/resize-observer
 
 # Installation
 
