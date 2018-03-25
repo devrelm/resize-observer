@@ -26,6 +26,18 @@ describe('One ResizeObserver', () => {
     });
 
     describe('constructor', () => {
+        it('throws a TypeError if constructed with `undefined`', () => {
+            expect(() => {
+                new window.ResizeObserver();
+            }).to.throw(TypeError);
+        });
+
+        it('throws a TypeError if constructed with a non-function', () => {
+            expect(() => {
+                new window.ResizeObserver('blah');
+            }).to.throw(TypeError);
+        });
+
         it('creates a new ResizeObserver', () => {
             const ro = new window.ResizeObserver();
             expect(ro).to.be.an.instanceof(window.ResizeObserver);
@@ -34,6 +46,46 @@ describe('One ResizeObserver', () => {
         it('adds the new ResizeObserver to document.resizeObservers', () => {
             const ro = new window.ResizeObserver();
             expect(document.resizeObservers.length).to.equal(1);
+        });
+    });
+
+    describe('observe', () => {
+        let resizeObserver;
+
+        beforeEach(() => {
+            resizeObserver = new window.ResizeObserver(() => {});
+        });
+
+        it('throws a TypeError if called with a `undefined`', () => {
+            expect(() => {
+                resizeObserver.observe();
+            }).to.throw(TypeError);
+        });
+
+        it('throws a TypeError if called with a non-function', () => {
+            expect(() => {
+                resizeObserver.observe('test');
+            }).to.throw(TypeError);
+        });
+    });
+
+    describe('unobserve', () => {
+        let resizeObserver;
+
+        beforeEach(() => {
+            resizeObserver = new window.ResizeObserver(() => {});
+        });
+
+        it('throws a TypeError if called with a `undefined`', () => {
+            expect(() => {
+                resizeObserver.unobserve();
+            }).to.throw(TypeError);
+        });
+
+        it('throws a TypeError if called with a non-function', () => {
+            expect(() => {
+                resizeObserver.unobserve('test');
+            }).to.throw(TypeError);
         });
     });
 
