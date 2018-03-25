@@ -39,12 +39,12 @@ describe('One ResizeObserver', () => {
         });
 
         it('creates a new ResizeObserver', () => {
-            const ro = new window.ResizeObserver();
+            const ro = new window.ResizeObserver(() => {});
             expect(ro).to.be.an.instanceof(window.ResizeObserver);
         });
 
         it('adds the new ResizeObserver to document.resizeObservers', () => {
-            const ro = new window.ResizeObserver();
+            const ro = new window.ResizeObserver(() => {});
             expect(document.resizeObservers.length).to.equal(1);
         });
     });
