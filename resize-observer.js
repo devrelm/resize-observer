@@ -9,6 +9,9 @@
     window.ResizeObserver = ResizeObserver;
 
     function ResizeObserver(callback) {
+        if (typeof callback !== 'function') {
+            throw new TypeError();
+        }
         document.resizeObservers.push(this);
         this.__callback = callback;
         this.__observationTargets = [];
@@ -16,6 +19,9 @@
     }
 
     ResizeObserver.prototype.observe = function(target) {
+        if (!(target instanceof window.Element)) {
+            throw new TypeError();
+        }
         var resizeObservationIndex = findTargetIndex(this.__observationTargets, target);
         if (resizeObservationIndex >= 0) {
             return;
@@ -26,6 +32,9 @@
     };
 
     ResizeObserver.prototype.unobserve = function(target) {
+        if (!(target instanceof window.Element)) {
+            throw new TypeError();
+        }
         var resizeObservationIndex = findTargetIndex(this.__observationTargets, target);
         if (resizeObservationIndex === -1) {
             return;
