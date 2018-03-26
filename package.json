@@ -19,7 +19,7 @@
     "polyfill",
     "element-resize"
   ],
-  "author": "Mike Deverell <mike@pelotoncycle.com>",
+  "author": "Mike Deverell <mike@onepeloton.com>",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/pelotoncycle/resize-observer/issues"
