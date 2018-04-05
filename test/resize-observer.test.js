@@ -1,51 +1,51 @@
-const {expect} = require('chai');
-const MockBrowser = require('mock-browser').mocks.MockBrowser;
-const mockRaf = require('mock-raf')();
+// tslint:disable:no-unused-expression
+const { expect } = require('chai');
+const { JSDOM } = require('jsdom');
+const MockRaf = require('mock-raf');
 const sinon = require('sinon');
 
-describe('One ResizeObserver', () => {
-    beforeEach(() => {
-        global.window = MockBrowser.createWindow();
-        global.document = MockBrowser.createDocument();
+describe('ResizeObserver', () => {
+    let mockRaf;
 
+    beforeEach(() => {
+        global.window = (new JSDOM(`<!DOCTYPE html/><html><body></body></html>`)).window;
+        global.document = window.document;
+
+        mockRaf = MockRaf();
         window.requestAnimationFrame = mockRaf.raf;
+        window.cancelAnimationFrame = mockRaf.cancel;
         sinon.stub(window, 'requestAnimationFrame', mockRaf.raf);
-        require('../resize-observer');
+        sinon.stub(window, 'cancelAnimationFrame', mockRaf.cancel);
+        require('../dist/resize-observer.min');
     });
 
     afterEach(() => {
-        delete require.cache[require.resolve('../resize-observer')];
+        delete require.cache[require.resolve('../dist/resize-observer.min')];
     });
 
     it('is attached to window', () => {
         expect(window.ResizeObserver).not.to.be.undefined;
     });
 
-    it('begins waiting', () => {
-        expect(window.requestAnimationFrame.calledOnce).to.equal(true);
-    });
-
     describe('constructor', () => {
         it('throws a TypeError if constructed with `undefined`', () => {
             expect(() => {
                 new window.ResizeObserver();
-            }).to.throw(TypeError);
+            }).to.throw(TypeError, 'Failed to construct \'ResizeObserver\': 1 argument required, but only 0 present.');
         });
 
         it('throws a TypeError if constructed with a non-function', () => {
             expect(() => {
                 new window.ResizeObserver('blah');
-            }).to.throw(TypeError);
+            }).to.throw(
+                TypeError,
+                'Failed to construct \'ResizeObserver\': The callback provided as parameter 1 is not a function.'
+            );
         });
 
         it('creates a new ResizeObserver', () => {
-            const ro = new window.ResizeObserver(() => {});
+            const ro = new window.ResizeObserver(() => undefined);
             expect(ro).to.be.an.instanceof(window.ResizeObserver);
-        });
-
-        it('adds the new ResizeObserver to document.resizeObservers', () => {
-            const ro = new window.ResizeObserver(() => {});
-            expect(document.resizeObservers.length).to.equal(1);
         });
     });
 
@@ -53,19 +53,25 @@ describe('One ResizeObserver', () => {
         let resizeObserver;
 
         beforeEach(() => {
-            resizeObserver = new window.ResizeObserver(() => {});
+            resizeObserver = new window.ResizeObserver(() => undefined);
         });
 
         it('throws a TypeError if called with a `undefined`', () => {
             expect(() => {
                 resizeObserver.observe();
-            }).to.throw(TypeError);
+            }).to.throw(
+                TypeError,
+                'Failed to execute \'observe\' on \'ResizeObserver\': 1 argument required, but only 0 present.'
+            );
         });
 
         it('throws a TypeError if called with a non-function', () => {
             expect(() => {
                 resizeObserver.observe('test');
-            }).to.throw(TypeError);
+            }).to.throw(
+                TypeError,
+                'Failed to execute \'observe\' on \'ResizeObserver\': parameter 1 is not of type \'Element\'.'
+            );
         });
     });
 
@@ -73,19 +79,25 @@ describe('One ResizeObserver', () => {
         let resizeObserver;
 
         beforeEach(() => {
-            resizeObserver = new window.ResizeObserver(() => {});
+            resizeObserver = new window.ResizeObserver(() => undefined);
         });
 
         it('throws a TypeError if called with a `undefined`', () => {
             expect(() => {
                 resizeObserver.unobserve();
-            }).to.throw(TypeError);
+            }).to.throw(
+                TypeError,
+                'Failed to execute \'unobserve\' on \'ResizeObserver\': 1 argument required, but only 0 present.'
+            );
         });
 
         it('throws a TypeError if called with a non-function', () => {
             expect(() => {
                 resizeObserver.unobserve('test');
-            }).to.throw(TypeError);
+            }).to.throw(
+                TypeError,
+                'Failed to execute \'unobserve\' on \'ResizeObserver\': parameter 1 is not of type \'Element\'.'
+            );
         });
     });
 
@@ -95,75 +107,80 @@ describe('One ResizeObserver', () => {
         let elementWidth;
         let elementHeight;
         let resizeObserver;
-        let mockGbcr;
+        let mockGcs;
 
         beforeEach(() => {
             element = document.createElement('div');
-            elementWidth = 0;
-            elementHeight = 0;
-            mockGbcr = sinon.stub(element, 'getBoundingClientRect', () => {
+            elementWidth = '0';
+            elementHeight = '0';
+            mockGcs = sinon.stub(window, 'getComputedStyle', () => {
                 return {
+                    height: elementHeight,
                     width: elementWidth,
-                    height: elementHeight
                 };
             });
             document.body.appendChild(element);
             callback = sinon.spy();
+
             resizeObserver = new window.ResizeObserver(callback);
 
             resizeObserver.observe(element);
         });
 
-        it('watches the element for height changes', () => {
-            expect(callback.called).to.equal(false);
+        it('begins waiting', () => {
+            expect(window.requestAnimationFrame.callCount).to.equal(1);
+        });
 
-            elementHeight = 10;
+        it('watches the element for height changes', () => {
+            expect(callback.callCount).to.equal(0);
+
+            elementHeight = '10px';
             mockRaf.step();
 
-            expect(callback.called).to.equal(true);
+            expect(callback.callCount).to.equal(1);
         });
 
         it('watches the element for width changes', () => {
-            expect(callback.called).to.equal(false);
+            expect(callback.callCount).to.equal(0);
 
-            elementWidth = 10;
+            elementWidth = '10px';
             mockRaf.step();
 
-            expect(callback.called).to.equal(true);
+            expect(callback.callCount).to.equal(1);
         });
 
         it('does not dispatch when width and height do not change', () => {
-            expect(callback.called).to.equal(false);
+            expect(callback.callCount).to.equal(0);
 
-            elementWidth = 10;
-
-            mockRaf.step();
-
-            expect(callback.calledOnce).to.equal(true);
+            elementWidth = '10px';
 
             mockRaf.step();
 
-            expect(callback.calledOnce).to.equal(true);
+            expect(callback.callCount).to.equal(1);
 
             mockRaf.step();
 
-            expect(callback.calledOnce).to.equal(true);
+            expect(callback.callCount).to.equal(1);
+
+            mockRaf.step();
+
+            expect(callback.callCount).to.equal(1);
         });
 
         it('dispatches the callback once per requestAnimationFrame', () => {
-            expect(callback.called).to.equal(false);
+            expect(callback.callCount).to.equal(0);
 
-            elementWidth = 10;
-
-            mockRaf.step();
-
-            expect(callback.calledOnce).to.equal(true);
-
-            elementWidth = 20;
+            elementWidth = '10px';
 
             mockRaf.step();
 
-            expect(callback.calledTwice).to.equal(true);
+            expect(callback.callCount).to.equal(1);
+
+            elementWidth = '20px';
+
+            mockRaf.step();
+
+            expect(callback.callCount).to.equal(2);
         });
 
         describe('after unobserve', () => {
@@ -172,14 +189,14 @@ describe('One ResizeObserver', () => {
             });
 
             it('no longer dispatches when the element resizes', () => {
-                elementWidth = 10;
-                elementHeight = 10;
+                elementWidth = '10px';
+                elementHeight = '10px';
 
-                mockGbcr.reset();
+                mockGcs.reset();
                 mockRaf.step();
 
-                expect(callback.called).to.equal(false);
-                expect(mockGbcr.called).to.equal(false);
+                expect(callback.callCount).to.equal(0);
+                expect(mockGcs.callCount).to.equal(0);
             });
         });
     });
@@ -189,29 +206,31 @@ describe('One ResizeObserver', () => {
         let elements;
         let elementWidths;
         let elementHeights;
-        let mockGbcrs;
+        let mockGcs;
         let resizeObserver;
 
         beforeEach(() => {
             elements = [];
             elementWidths = [];
             elementHeights = [];
-            mockGbcrs = [];
             elements[0] = document.createElement('div');
+            elements[0].innerText = 'Element 1';
             elements[1] = document.createElement('div');
-            elementWidths[0] = elementWidths[1] = 0;
-            elementHeights[0] = elementHeights[1] = 0;
+            elements[1].innerText = 'Element 2';
+            elementWidths[0] = elementWidths[1] = '0';
+            elementHeights[0] = elementHeights[1] = '0';
 
             callback = sinon.spy();
             resizeObserver = new window.ResizeObserver(callback);
 
-            elements.forEach((el, index) => {
-                mockGbcrs[index] = sinon.stub(el, 'getBoundingClientRect', () => {
-                    return {
-                        width: elementWidths[index],
-                        height: elementHeights[index]
-                    };
-                });
+            mockGcs = sinon.stub(window, 'getComputedStyle', el => {
+                const index = elements.indexOf(el);
+                return {
+                    height: elementHeights[index],
+                    width: elementWidths[index],
+                };
+            });
+            elements.forEach(el => {
                 document.body.appendChild(el);
                 resizeObserver.observe(el);
             });
@@ -219,32 +238,32 @@ describe('One ResizeObserver', () => {
         });
 
         it('calls the callback when either element\'s size has changed', () => {
-            expect(callback.called).to.equal(false);
+            expect(callback.callCount).to.equal(0);
 
-            elementWidths[0] = 10;
+            elementWidths[0] = '10px';
             mockRaf.step();
 
-            expect(callback.calledOnce).to.equal(true);
+            expect(callback.callCount).to.equal(1);
 
-            elementWidths[1] = 10;
+            elementWidths[1] = '10px';
             mockRaf.step();
 
-            expect(callback.calledTwice).to.equal(true);
+            expect(callback.callCount).to.equal(2);
         });
 
         it('calls the callback once when both elements\' sizes have changed', () => {
-            expect(callback.called).to.equal(false);
+            expect(callback.callCount).to.equal(0);
 
-            elementWidths[0] = 10;
-            elementWidths[1] = 10;
-
-            mockRaf.step();
-
-            expect(callback.calledOnce).to.equal(true);
+            elementWidths[0] = '10px';
+            elementWidths[1] = '10px';
 
             mockRaf.step();
 
-            expect(callback.calledOnce).to.equal(true);
+            expect(callback.callCount).to.equal(1);
+
+            mockRaf.step();
+
+            expect(callback.callCount).to.equal(1);
         });
 
         describe('after unobserving the first element', () => {
@@ -253,27 +272,33 @@ describe('One ResizeObserver', () => {
             });
 
             it('stops observing that element', () => {
-                elementWidths[0] = 10;
-                elementHeights[0] = 10;
+                elementWidths[0] = '10px';
+                elementHeights[0] = '10px';
 
-                mockGbcrs[0].reset();
-                mockGbcrs[1].reset();
+                callback.reset();
+                mockGcs.reset();
                 mockRaf.step();
 
-                expect(callback.called).to.equal(false);
-                expect(mockGbcrs[0].called).to.equal(false);
+                expect(callback.callCount).to.equal(0,
+                    'expect callback call count to be 0');
+                expect(mockGcs.callCount).to.equal(1,
+                    'expect getComputedStyle call count to be 1');
             });
 
             it('still observes the second element', () => {
-                elementWidths[1] = 10;
-                elementHeights[1] = 10;
+                elementWidths[1] = '10px';
+                elementHeights[1] = '10px';
 
-                mockGbcrs[0].reset();
-                mockGbcrs[1].reset();
+                callback.reset();
+                mockGcs.reset();
                 mockRaf.step();
 
-                expect(callback.called).to.equal(true);
-                expect(mockGbcrs[1].called).to.equal(true);
+                expect(callback.callCount).to.equal(1,
+                    'expect callback call count to be 1');
+                expect(mockGcs.callCount).to.equal(3,
+                    'expect getComputedStyle call count to be 3 (1x ResizeObserverEntry, 2x gather active obs.)');
+                expect(mockGcs.getCall(0).args[0]).to.equal(elements[1],
+                    'expect getComputedStyle to be passed the second element');
             });
         });
 
@@ -283,27 +308,53 @@ describe('One ResizeObserver', () => {
             });
 
             it('stops observing that element', () => {
-                elementWidths[1] = 10;
-                elementHeights[1] = 10;
+                elementWidths[1] = '10px';
+                elementHeights[1] = '10px';
 
-                mockGbcrs[0].reset();
-                mockGbcrs[1].reset();
+                callback.reset();
+                mockGcs.reset();
                 mockRaf.step();
 
-                expect(callback.called).to.equal(false);
-                expect(mockGbcrs[1].called).to.equal(false);
+                expect(callback.callCount).to.equal(0,
+                    'expect callback call count to be 0');
+                expect(mockGcs.callCount).to.equal(1,
+                    'expect getComputedStyle call count to be 1');
             });
 
             it('still observes the first element', () => {
-                elementWidths[0] = 10;
-                elementHeights[0] = 10;
+                elementWidths[0] = '10px';
+                elementHeights[0] = '10px';
 
-                mockGbcrs[0].reset();
-                mockGbcrs[1].reset();
+                callback.reset();
+                mockGcs.reset();
                 mockRaf.step();
 
-                expect(callback.called).to.equal(true);
-                expect(mockGbcrs[0].called).to.equal(true);
+                expect(callback.callCount).to.equal(1,
+                    'expect callback call count to be 1');
+                expect(mockGcs.callCount).to.equal(3,
+                    'expect getComputedStyle call count to be 3 (1x ResizeObserverEntry, 2x gather active obs.)');
+                expect(mockGcs.getCall(0).args[0]).to.equal(elements[0],
+                    'expect getComputedStyle to be passed the first element');
+            });
+        });
+
+        describe('after unobserving both elements', () => {
+            beforeEach(() => {
+                resizeObserver.unobserve(elements[0]);
+                resizeObserver.unobserve(elements[1]);
+            });
+
+            it('stops the requestAnimationFrame loop', () => {
+                mockGcs.reset();
+                window.requestAnimationFrame.reset();
+                mockRaf.step();
+
+                expect(callback.callCount).to.equal(0,
+                    'expect callback call count to be 0');
+                expect(mockGcs.callCount).to.equal(0,
+                    'expect getComputedStyle call count to be 0');
+                expect(window.requestAnimationFrame.callCount).to.equal(0,
+                    'expect requestAnimationFrame call count to be 0');
             });
         });
     });
