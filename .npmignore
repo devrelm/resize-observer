@@ -1,5 +1,6 @@
 .gitignore
 .travis.yml
+.vscode
 
 coverage
 node_modules
