@@ -2,10 +2,14 @@
   "name": "resize-observer",
   "version": "0.1.1",
   "description": "An implementation and polyfill of the Resize Observer draft.",
-  "main": "resize-observer.js",
-  "typings": "resize-observer.d.ts",
+  "main": "lib/ResizeObserver.js",
+  "typings": "lib/ResizeObserver.d.ts",
   "scripts": {
-    "test": "npm run lint && mocha",
+    "browserify:dev": "browserify lib/ResizeObserver.js -o dist/resize-observer.js",
+    "browserify:prod": "browserify lib/ResizeObserver.js | uglifyjs -c --mangle --safari10 --ecma 5 -o dist/resize-observer.min.js",
+    "build": "npm run clean && tsc && npm run browserify:dev && npm run browserify:prod",
+    "clean": "rm -rf dist lib",
+    "test": "npm run lint && npm run build && mocha",
     "test-cov": "istanbul cover _mocha",
     "lint": "eslint resize-observer.js tests/ && echo Lint passed.",
     "coveralls": "npm run test-cov -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
@@ -25,7 +29,33 @@
     "url": "https://github.com/pelotoncycle/resize-observer/issues"
   },
   "homepage": "https://github.com/pelotoncycle/resize-observer#readme",
+  "browserify": {
+    "standalone": "ResizeObserver",
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            [
+              "env",
+              {
+                "targets": {
+                  "browsers": [
+                    "last 3 versions"
+                  ]
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babelify": "^8.0.0",
+    "browserify": "^16.1.1",
     "chai": "^3.5.0",
     "coveralls": "^2.11.9",
     "eslint": "^2.12.0",
@@ -35,6 +65,8 @@
     "mocha-lcov-reporter": "^1.2.0",
     "mock-browser": "^0.92.12",
     "mock-raf": "0.0.2",
-    "sinon": "^1.17.4"
+    "sinon": "^1.17.4",
+    "typescript": "^3.0.1",
+    "uglify-es": "^3.3.9"
   }
 }

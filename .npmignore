@@ -2,5 +2,7 @@
 .travis.yml
 
 coverage
-test
 node_modules
+src
+test
+tsconfig.json
