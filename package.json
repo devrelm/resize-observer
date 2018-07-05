@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "An implementation and polyfill of the Resize Observer draft.",
   "main": "resize-observer.js",
+  "typings": "resize-observer.d.ts",
   "scripts": {
     "test": "npm run lint && mocha",
     "test-cov": "istanbul cover _mocha",
