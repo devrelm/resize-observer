@@ -7,12 +7,12 @@
   "scripts": {
     "browserify:dev": "browserify lib/index.js -o dist/resize-observer.js",
     "browserify:prod": "browserify lib/index.js | uglifyjs -c --mangle --safari10 --ecma 5 -o dist/resize-observer.min.js",
-    "build": "npm run clean && tsc && npm run browserify:dev && npm run browserify:prod",
+    "build": "yarn clean && tsc && yarn browserify:dev && yarn browserify:prod",
     "clean": "rm -rf dist lib",
-    "test": "npm run lint && npm run build && mocha",
+    "test": "yarn lint && yarn build && mocha",
     "test-cov": "istanbul cover _mocha",
     "lint": "tslint -c tslint.json 'src/**/*.ts' 'test/**/*.js' && echo Lint passed.",
-    "coveralls": "npm run test-cov -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
+    "coveralls": "yarn test-cov -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
