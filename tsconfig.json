@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "declaration": true,
+        "inlineSourceMap": true,
+        "module": "CommonJS",
+        "moduleResolution": "node",
+        "outDir": "./lib",
+        "target": "es5",
+        "strict": true,
+        "stripInternal": true
+    },
+    "files": [
+        "./src/index.ts",
+    ]
+}

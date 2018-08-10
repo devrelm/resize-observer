@@ -1,6 +1,10 @@
 .gitignore
 .travis.yml
+.vscode
 
 coverage
-test
 node_modules
+src
+test
+tsconfig.json
+tslint.json

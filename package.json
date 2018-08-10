@@ -2,13 +2,17 @@
   "name": "resize-observer",
   "version": "0.1.1",
   "description": "An implementation and polyfill of the Resize Observer draft.",
-  "main": "resize-observer.js",
-  "typings": "resize-observer.d.ts",
+  "main": "lib/ResizeObserver.js",
+  "typings": "lib/ResizeObserver.d.ts",
   "scripts": {
-    "test": "npm run lint && mocha",
+    "browserify:dev": "browserify lib/index.js -o dist/resize-observer.js",
+    "browserify:prod": "browserify lib/index.js | uglifyjs -c --mangle --safari10 --ecma 5 -o dist/resize-observer.min.js",
+    "build": "yarn clean && tsc && yarn browserify:dev && yarn browserify:prod",
+    "clean": "rm -rf dist lib",
+    "test": "yarn lint && yarn build && mocha",
     "test-cov": "istanbul cover _mocha",
-    "lint": "eslint resize-observer.js tests/ && echo Lint passed.",
-    "coveralls": "npm run test-cov -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
+    "lint": "tslint -c tslint.json 'src/**/*.ts' 'test/**/*.js' && echo Lint passed.",
+    "coveralls": "yarn test-cov -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -17,24 +21,52 @@
   "keywords": [
     "ResizeObserver",
     "polyfill",
+    "ponyfill",
     "element-resize"
   ],
-  "author": "Mike Deverell <mike@pelotoncycle.com>",
+  "author": "Mike Deverell <mike@onepeloton.com>",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/pelotoncycle/resize-observer/issues"
   },
   "homepage": "https://github.com/pelotoncycle/resize-observer#readme",
+  "browserify": {
+    "standalone": "ResizeObserver",
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            [
+              "env",
+              {
+                "targets": {
+                  "browsers": [
+                    "last 3 versions"
+                  ]
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babelify": "^8.0.0",
+    "browserify": "^16.1.1",
     "chai": "^3.5.0",
     "coveralls": "^2.11.9",
-    "eslint": "^2.12.0",
     "istanbul": "^0.4.3",
-    "jsdom": "^9.2.1",
+    "jsdom": "^11.6.2",
     "mocha": "^2.5.3",
     "mocha-lcov-reporter": "^1.2.0",
-    "mock-browser": "^0.92.12",
-    "mock-raf": "0.0.2",
-    "sinon": "^1.17.4"
+    "mock-raf": "^1.0.0",
+    "sinon": "^1.17.4",
+    "tslint": "^5.11.0",
+    "typescript": "^3.0.1",
+    "uglify-es": "^3.3.9"
   }
 }

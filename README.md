@@ -2,8 +2,8 @@
 
 [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![NPM Version][npm-image]][npm-url]
 
-This library aims to be a faithful implementation and polyfill of the
-[Resize Observer draft](https://wicg.github.io/ResizeObserver/).
+This library aims to be a faithful implementation and [ponyfill](https://ponyfill.com) of the
+[Resize Observer draft](https://wicg.github.io/ResizeObserver/). An optional polyfill option exists as well.
 
 [travis-image]: https://travis-ci.org/pelotoncycle/resize-observer.svg?branch=master
 [travis-url]: https://travis-ci.org/pelotoncycle/resize-observer
@@ -18,29 +18,65 @@ This library aims to be a faithful implementation and polyfill of the
 
 `resize-observer` is available on NPM and Yarn:
 
-```
-npm install resize-observer
+```shell
+> npm install resize-observer
 ```
 
-```
-yarn add resize-observer
+```shell
+> yarn add resize-observer
 ```
 
 # Setup
 
-`resize-observer` installs itself as `window.ResizeObserver` when it is required or otherwise put on the page:
+## As a ponyfill/module
 
-```
-require('resize-observer');
+`resize-observer` does not install itself by default. As such, you can import it like any other module:
 
-const ro = new window.ResizeObserver();
+```ts
+import { ResizeObserver } from 'resize-observer';
+
+const ro = new ResizeObserver(() => console.log('resize observed!'));
+ro.observe(document.body);
 ```
 
-```
-<script src="/path/to/resize-observer.js"></script>
+## As a polyfill
+
+`resize-observer` provides a file that can be referenced from your browser that automatically installs `ResizeObserver`
+on the global `window` object. Both minified and non-minified versions exist, and are found in the package under the
+`dist/` directory:
+
+```html
+<script src="/node_modules/resize-observer/dist/resize-observer.js"></script>
 <script type="text/javascript">
-  const ro = new window.ResizeObserver();
+  const ro = new window.ResizeObserver(() => alert('Observing things is super cool!'));
+  /* use your ResizeObserver! */
 </script>
 ```
 
-**NOTE**: this behavior (auto-installing) may change in a future version.
+A `install` method is also provided to do the same within your own code:
+
+```ts
+import { install } from 'resize-observer';
+
+install();
+
+const ro = new window.ResizeObserver(() => alert('Observe all the things!'));
+/* ... */
+```
+
+**Note:** Calling `install` will _always_ overwrite `window.ResizeObserver`.
+If you'd like to only install `resize-observer` when it doesn't already exist,
+you can add a simple check before calling `install`:
+
+```ts
+import { install } from 'resize-observer';
+
+if (!window.ResizeObserver) install();
+
+/* ... */
+```
+
+# TypeScript definitions
+
+`resize-observer` is written in TypeScript.
+The definition files are included in the package and should be picked up automatically.
