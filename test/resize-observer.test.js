@@ -16,11 +16,16 @@ describe('ResizeObserver', () => {
         window.cancelAnimationFrame = mockRaf.cancel;
         sinon.stub(window, 'requestAnimationFrame', mockRaf.raf);
         sinon.stub(window, 'cancelAnimationFrame', mockRaf.cancel);
+
+        if (window.ResizeObserver) {
+            throw new Error('ResizeObserver should not exist on window inside beforeEach');
+        }
         require('../dist/resize-observer.min');
     });
 
     afterEach(() => {
         delete require.cache[require.resolve('../dist/resize-observer.min')];
+        delete window.ResizeObserver;
     });
 
     it('is attached to window', () => {

@@ -183,8 +183,10 @@ const checkStopLoop = () => {
     }
 };
 
-(window as any).ResizeObserver = (window as any).ResizeObserver || ResizeObserver;
+const install = () =>
+    (window as any).ResizeObserver = ResizeObserver;
 
 export {
+    install,
     ResizeObserver,
 };

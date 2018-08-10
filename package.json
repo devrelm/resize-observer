@@ -5,8 +5,8 @@
   "main": "lib/ResizeObserver.js",
   "typings": "lib/ResizeObserver.d.ts",
   "scripts": {
-    "browserify:dev": "browserify lib/ResizeObserver.js -o dist/resize-observer.js",
-    "browserify:prod": "browserify lib/ResizeObserver.js | uglifyjs -c --mangle --safari10 --ecma 5 -o dist/resize-observer.min.js",
+    "browserify:dev": "browserify lib/index.js -o dist/resize-observer.js",
+    "browserify:prod": "browserify lib/index.js | uglifyjs -c --mangle --safari10 --ecma 5 -o dist/resize-observer.min.js",
     "build": "npm run clean && tsc && npm run browserify:dev && npm run browserify:prod",
     "clean": "rm -rf dist lib",
     "test": "npm run lint && npm run build && mocha",
@@ -21,6 +21,7 @@
   "keywords": [
     "ResizeObserver",
     "polyfill",
+    "ponyfill",
     "element-resize"
   ],
   "author": "Mike Deverell <mike@onepeloton.com>",

@@ -6,6 +6,7 @@ All minor versions less than 1.0.0 are breaking changes.
 
 ## [UNRELEASED]
 ### Changed
+- `resize-observer` is now a [ponyfill](https://ponyfill.com)
 - Rewritten in TypeScript
 - Type declaration files are now generated
 

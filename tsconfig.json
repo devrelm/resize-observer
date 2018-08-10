@@ -10,6 +10,6 @@
         "stripInternal": true
     },
     "files": [
-        "./src/ResizeObserver.ts",
+        "./src/index.ts",
     ]
 }
