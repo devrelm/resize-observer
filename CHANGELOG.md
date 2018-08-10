@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 All minor versions less than 1.0.0 are breaking changes.
 
+## [0.1.1] - 2018-08-10
+### Fixed
+- Added typings to `package.json`
+
 ## [0.1.0] - 2018-03-25
 ### Fixed
 - `new ResizeObserver`, `ResizeObserver.prototype.observe`, and , `ResizeObserver.prototype.unobserve` should throw a `TypeError` when called with no arguments or the wrong argument type.
@@ -37,6 +41,7 @@ All minor versions less than 1.0.0 are breaking changes.
 - license
 - npm package
 
+[0.1.1]: https://github.com/pelotoncycle/resize-observer/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/pelotoncycle/resize-observer/compare/v0.0.4...v0.1.0
 [0.0.4]: https://github.com/pelotoncycle/resize-observer/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/pelotoncycle/resize-observer/compare/v0.0.2...v0.0.3
