@@ -11,7 +11,7 @@
     "clean": "rm -rf dist lib",
     "test": "npm run lint && npm run build && mocha",
     "test-cov": "istanbul cover _mocha",
-    "lint": "eslint resize-observer.js tests/ && echo Lint passed.",
+    "lint": "tslint -c tslint.json 'src/**/*.ts' 'test/**/*.js' && echo Lint passed.",
     "coveralls": "npm run test-cov -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
@@ -58,13 +58,13 @@
     "browserify": "^16.1.1",
     "chai": "^3.5.0",
     "coveralls": "^2.11.9",
-    "eslint": "^2.12.0",
     "istanbul": "^0.4.3",
     "jsdom": "^11.6.2",
     "mocha": "^2.5.3",
     "mocha-lcov-reporter": "^1.2.0",
     "mock-raf": "^1.0.0",
     "sinon": "^1.17.4",
+    "tslint": "^5.11.0",
     "typescript": "^3.0.1",
     "uglify-es": "^3.3.9"
   }
