@@ -8,7 +8,7 @@
     "browserify:dev": "browserify lib/index.js -o dist/resize-observer.js",
     "browserify:prod": "browserify lib/index.js | uglifyjs -c --mangle --safari10 --ecma 5 -o dist/resize-observer.min.js",
     "build": "yarn clean && tsc && yarn browserify:dev && yarn browserify:prod",
-    "clean": "rm -rf dist lib",
+    "clean": "rm -rf coverage dist lib",
     "coveralls": "yarn test-cov -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
     "lint": "tslint -c tslint.json 'src/**/*.ts' 'test/**/*.js' && echo Lint passed.",
     "test": "yarn lint && yarn build && mocha",
