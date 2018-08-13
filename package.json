@@ -12,7 +12,8 @@
     "coveralls": "yarn test-cov -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
     "lint": "tslint -c tslint.json 'src/**/*.ts' 'test/**/*.js' && echo Lint passed.",
     "test": "yarn lint && yarn build && mocha",
-    "test-cov": "istanbul cover _mocha"
+    "test-cov": "istanbul cover _mocha",
+    "preversion": "yarn test"
   },
   "repository": {
     "type": "git",
