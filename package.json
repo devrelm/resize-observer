@@ -9,10 +9,10 @@
     "browserify:prod": "browserify lib/index.js | uglifyjs -c --mangle --safari10 --ecma 5 -o dist/resize-observer.min.js",
     "build": "yarn clean && tsc && yarn browserify:dev && yarn browserify:prod",
     "clean": "rm -rf dist lib",
-    "test": "yarn lint && yarn build && mocha",
-    "test-cov": "istanbul cover _mocha",
+    "coveralls": "yarn test-cov -- --report lcovonly && cat ./coverage/lcov.info | coveralls",
     "lint": "tslint -c tslint.json 'src/**/*.ts' 'test/**/*.js' && echo Lint passed.",
-    "coveralls": "yarn test-cov -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
+    "test": "yarn lint && yarn build && mocha",
+    "test-cov": "istanbul cover _mocha"
   },
   "repository": {
     "type": "git",
