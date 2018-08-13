@@ -13,6 +13,7 @@
     "lint": "tslint -c tslint.json 'src/**/*.ts' 'test/**/*.js' && echo Lint passed.",
     "test": "yarn lint && yarn build && mocha",
     "test-cov": "istanbul cover _mocha",
+    "prepack": "yarn test",
     "preversion": "yarn test"
   },
   "repository": {
