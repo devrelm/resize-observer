@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 All minor versions less than 1.0.0 are breaking changes.
 
+## [UNRELEASED]
+- Include `src/` files in the npm package (#12)
+
 ## [1.0.0-alpha.0] - 2018-08-13
 ### Changed
 - `resize-observer` is now a [ponyfill](https://ponyfill.com)
@@ -47,6 +50,7 @@ All minor versions less than 1.0.0 are breaking changes.
 - license
 - npm package
 
+[UNRELEASED]: https://github.com/pelotoncycle/resize-observer/compare/v1.0.0-alpha.0...HEAD
 [1.0.0-alpha.0]: https://github.com/pelotoncycle/resize-observer/compare/v0.1.1...v1.0.0-alpha.0
 [0.1.1]: https://github.com/pelotoncycle/resize-observer/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/pelotoncycle/resize-observer/compare/v0.0.4...v0.1.0
