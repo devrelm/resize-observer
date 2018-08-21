@@ -2,6 +2,8 @@
 
 [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![NPM Version][npm-image]][npm-url]
 
+[![npm bundle size (minified + gzip)][size-image]][size-url]
+
 This library aims to be a faithful implementation and [ponyfill](https://ponyfill.com) of the
 [Resize Observer draft](https://wicg.github.io/ResizeObserver/). An optional polyfill option exists as well.
 
@@ -13,6 +15,9 @@ This library aims to be a faithful implementation and [ponyfill](https://ponyfil
 
 [npm-image]: https://img.shields.io/npm/v/resize-observer.svg
 [npm-url]: https://www.npmjs.com/package/resize-observer
+
+[size-image]: https://img.shields.io/bundlephobia/minzip/resize-observer.svg
+[size-url]: https://bundlephobia.com/result?p=resize-observer
 
 # Installation
 
