@@ -1,9 +1,0 @@
-language: node_js
-
-node_js:
-  - "6"
-
-after_script:
-  - yarn coveralls
-
-sudo: false
