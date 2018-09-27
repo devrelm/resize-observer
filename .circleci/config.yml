@@ -34,3 +34,5 @@ jobs:
           key: v1-dependencies-{{ checksum "yarn.lock" }}
 
       - run: yarn test
+      # - run: yarn coveralls # TODO: make sure that circleci is set up
+      #                       # with the correct coveralls keys / env variables
