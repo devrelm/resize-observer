@@ -1,14 +1,14 @@
 # resize-observer
 
-[![Build Status][travis-image]][travis-url] <!-- [![Coverage Status][coveralls-image]][coveralls-url] --> [![NPM Version][npm-image]][npm-url]
+[![Build Status][circleci-image]][circleci-url] <!-- [![Coverage Status][coveralls-image]][coveralls-url] --> [![NPM Version][npm-image]][npm-url]
 
 [![npm bundle size (minified + gzip)][size-image]][size-url]
 
 This library aims to be a faithful implementation and [ponyfill](https://ponyfill.com) of the
 [Resize Observer draft](https://wicg.github.io/ResizeObserver/). An optional polyfill option exists as well.
 
-[travis-image]: https://travis-ci.org/pelotoncycle/resize-observer.svg?branch=master
-[travis-url]: https://travis-ci.org/pelotoncycle/resize-observer
+[circleci-image]: https://circleci.com/gh/pelotoncycle/resize-observer.svg?style=svg
+[circleci-url]: https://circleci.com/gh/pelotoncycle/resize-observer
 
 [coveralls-image]: https://coveralls.io/repos/github/pelotoncycle/resize-observer/badge.svg?branch=master
 [coveralls-url]: https://coveralls.io/github/pelotoncycle/resize-observer?branch=master
