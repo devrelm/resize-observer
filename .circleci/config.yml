@@ -40,3 +40,11 @@ jobs:
       - run: yarn test
       # - run: yarn coveralls # TODO: make sure that circleci is set up
       #                       # with the correct coveralls keys / env variables
+
+workflows:
+
+  version: 2
+
+  build_and_test:
+    jobs:
+      - test
