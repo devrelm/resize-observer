@@ -42,6 +42,13 @@ jobs:
           paths:
             - .
 
+  build:
+    <<: *env_config
+    steps:
+      - attach_workspace:
+          at: .
+      - run: yarn build
+
   test:
     <<: *env_config
     steps:
@@ -58,6 +65,9 @@ workflows:
   build_and_test:
     jobs:
       - set_up_env
+      - build:
+          requires:
+            - set_up_env
       - test:
           requires:
             - set_up_env
