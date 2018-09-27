@@ -17,7 +17,7 @@ references:
     working_directory: ~/repo
 
 jobs:
-  test:
+  set_up_env:
     <<: *env_config
 
     steps:
@@ -37,6 +37,16 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "yarn.lock" }}
 
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  test:
+    <<: *env_config
+    steps:
+      - attach_workspace:
+          at: .
       - run: yarn test
       # - run: yarn coveralls # TODO: make sure that circleci is set up
       #                       # with the correct coveralls keys / env variables
@@ -47,4 +57,7 @@ workflows:
 
   build_and_test:
     jobs:
-      - test
+      - set_up_env
+      - test:
+          requires:
+            - set_up_env
