@@ -3,8 +3,8 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2
-jobs:
-  test:
+references:
+  env_config: &env_config
     docker:
       # specify the version you desire here
       - image: circleci/node:8.11
@@ -15,6 +15,10 @@ jobs:
       # - image: circleci/mongo:3.4.4
 
     working_directory: ~/repo
+
+jobs:
+  test:
+    <<: *env_config
 
     steps:
       - checkout
