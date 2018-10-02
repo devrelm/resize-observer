@@ -3,6 +3,7 @@
   "version": "1.0.0-alpha.1",
   "description": "An implementation and polyfill of the Resize Observer draft.",
   "main": "lib/ResizeObserver.js",
+  "unpkg": "dist/resize-observer.min.js",
   "typings": "lib/ResizeObserver.d.ts",
   "scripts": {
     "browserify:dev": "browserify lib/index.js -o dist/resize-observer.js",
