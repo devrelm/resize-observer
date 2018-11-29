@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 All minor versions less than 1.0.0 are breaking changes.
 
+## [1.0.0] - 2018-11-28
+### Added
+- Added `unpkg` field in `package.json`.
+  You can now load `dist/resize-observer.min.js` via `<script src="https://unpkg.com/resize-observer"></script>`. (#14) Thanks @renaatdemuynck!
+
+### Changed
+- Migrate from Travis to CircleCI for PR tests (#13)
+- Removed defective coverage badge (f65192b)
+
 ## [1.0.0-alpha.1] - 2018-08-21
 ### Changed
 - Include `src/` files in the npm package (#12)
