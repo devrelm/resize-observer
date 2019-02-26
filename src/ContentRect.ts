@@ -16,11 +16,26 @@ const ContentRect = (target: Element): Readonly<ContentRect> => {
         });
     } else { // if (target instanceof HTMLElement) { // also includes all other non-SVGGraphicsElements
         const styles = window.getComputedStyle(target);
+        let height = parseFloat(styles.height || '0')
+        let left = parseFloat(styles.paddingLeft || '0')
+        let top = parseFloat(styles.paddingTop || '0')
+        let width = parseFloat(styles.width || '0')
+        
+        // https://github.com/pelotoncycle/resize-observer/issues/19
+        if (isNaN(height) || isNaN(left) || isNaN(top) || isNaN(width)) {
+            const rect = target.getBoundingClientRect()
+            
+            height = rect.height
+            left = rect.left
+            top = rect.top
+            width = rect.width
+        }
+        
         return Object.freeze({
-            height: parseFloat(styles.height || '0'),
-            left: parseFloat(styles.paddingLeft || '0'),
-            top: parseFloat(styles.paddingTop || '0'),
-            width: parseFloat(styles.width || '0'),
+            height,
+            left,
+            top,
+            width,
         });
     }
 };
