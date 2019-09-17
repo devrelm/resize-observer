@@ -1821,8 +1821,8 @@ mocha@^2.5.3:
     to-iso-string "0.0.2"
 
 mock-raf@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/mock-raf/-/mock-raf-1.0.0.tgz#a288145178893e2040b230f2182fee2049f16f25"
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/mock-raf/-/mock-raf-1.0.1.tgz#7567d23fa1220439853317a8ff0eaad1588e9535"
   dependencies:
     object-assign "^3.0.0"
 
