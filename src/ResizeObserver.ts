@@ -52,6 +52,7 @@ class ResizeObserver {
     public disconnect() {
         this.$$observationTargets = [];
         this.$$activeTargets = [];
+        checkStopLoop();
     }
 }
 
