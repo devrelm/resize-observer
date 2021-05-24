@@ -29,7 +29,7 @@ class ResizeObserver {
             throw TypeError(message);
         }
         const index = findTargetIndex(this.$$observationTargets, target);
-        if (index > 0) {
+        if (index >= 0) {
             return;
         }
         this.$$observationTargets.push(new ResizeObservation(target));
