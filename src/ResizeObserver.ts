@@ -20,7 +20,6 @@ class ResizeObserver {
             throw TypeError(message);
         }
         this.$$callback = callback;
-        resizeObservers.push(this);
     }
 
     public observe(target: Element) {
@@ -31,6 +30,11 @@ class ResizeObserver {
         const index = findTargetIndex(this.$$observationTargets, target);
         if (index > 0) {
             return;
+        }
+        // Do not track this instance until the first target is added
+        // to allow GCing.
+        if (this.$$observationTargets.length === 0) {
+            resizeObservers.push(this);
         }
         this.$$observationTargets.push(new ResizeObservation(target));
         startLoop();
@@ -46,18 +50,27 @@ class ResizeObserver {
             return;
         }
         this.$$observationTargets.splice(index, 1);
+        this.$$checkStopTracking();
         checkStopLoop();
     }
 
     public disconnect() {
         this.$$observationTargets = [];
         this.$$activeTargets = [];
+        this.$$checkStopTracking();
+        checkStopLoop();
+    }
+
+    /** Remove from the observer list when no element is tracked to allow GC. */
+    private $$checkStopTracking() {
+        if (this.$$observationTargets.length > 0) {
+            return;
+        }
         const index = resizeObservers.indexOf(this);
         if (index < 0) {
             return;
         }
         resizeObservers.splice(index, 1);
-        checkStopLoop();
     }
 }
 
