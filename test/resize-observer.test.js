@@ -15,7 +15,7 @@ describe('ResizeObserver', () => {
         window.requestAnimationFrame = mockRaf.raf;
         window.cancelAnimationFrame = mockRaf.cancel;
         sinon.stub(window, 'requestAnimationFrame', mockRaf.raf);
-        sinon.stub(window, 'cancelAnimationFrame', mockRaf.cancel);
+        cancelAnimationFrameSpy = sinon.stub(window, 'cancelAnimationFrame', mockRaf.cancel);
 
         if (window.ResizeObserver) {
             throw new Error('ResizeObserver should not exist on window inside beforeEach');
@@ -202,6 +202,41 @@ describe('ResizeObserver', () => {
 
                 expect(callback.callCount).to.equal(0);
                 expect(mockGcs.callCount).to.equal(0);
+            });
+        });
+
+        describe('after disconnect', () => {
+            beforeEach(() => {
+                resizeObserver.disconnect();
+            });
+
+            it('calls cancelAnimationFrame once', () => {
+                expect(cancelAnimationFrameSpy.callCount).to.equal(1);
+            });
+
+            it('no longer dispatches when the element resizes', () => {
+                elementWidth = '10px';
+                elementHeight = '10px';
+
+                mockGcs.reset();
+                mockRaf.step();
+
+                expect(callback.callCount).to.equal(0);
+                expect(mockGcs.callCount).to.equal(0);
+            });
+
+            it('allows further elements to be observed', () => {
+                resizeObserver.observe(element);
+
+                elementWidth = '10px';
+                elementHeight = '10px';
+
+                mockGcs.reset();
+                mockRaf.step();
+
+                expect(callback.callCount).to.equal(1);
+                expect(mockGcs.callCount).to.equal(3,
+                    'expect getComputedStyle call count to be 3 (1x ResizeObserverEntry, 2x gather active obs.)');
             });
         });
     });
