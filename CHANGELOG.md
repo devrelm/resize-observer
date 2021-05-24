@@ -7,6 +7,7 @@ All minor versions less than 1.0.0 are breaking changes.
 ## [UNRELEASED] - 2021-05-24
 ### Fixed
 - Fix: Enable reuse of ResizeObserver (#96)
+- Fix allowing double tracking of the first element (#94; [thgreasi](https://github.com/thgreasi))
 
 ## [1.0.1] - 2021-05-24
 ### Fixed
