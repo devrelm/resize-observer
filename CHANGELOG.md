@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 All minor versions less than 1.0.0 are breaking changes.
 
+## [UNRELEASED] - 2021-05-24
+### Fixed
+- Fix: Enable reuse of ResizeObserver (#96)
+
 ## [1.0.1] - 2021-05-24
 ### Fixed
 - Fix memory & cpu leak after `disconnect()` (#93; [thgreasi](https://github.com/thgreasi))
@@ -14,9 +18,13 @@ All minor versions less than 1.0.0 are breaking changes.
 ## [1.0.0] - 2018-11-28
 ### Added
 - Added `unpkg` field in `package.json`.
-  You can now load `dist/resize-observer.min.js` via `<script src="https://unpkg.com/resize-observer"></script>`. (#14) Thanks @renaatdemuynck!
+  You can now load `dist/resize-observer.min.js` via `<script src="https://unpkg.com/resize-observer"></script>`. (#14; [renaatdemuynck](https://github.com/renaatdemuynck))
 
 ### Changed
+- Include `src/` files in the npm package (#12)
+- `resize-observer` is now a [ponyfill](https://ponyfill.com)
+- Rewritten in TypeScript
+- Type declaration files are now generated
 - Migrate from Travis to CircleCI for PR tests (#13)
 - Removed defective coverage badge (f65192b)
 
@@ -67,6 +75,7 @@ All minor versions less than 1.0.0 are breaking changes.
 - license
 - npm package
 
+[UNRELEASED]: https://github.com/pelotoncycle/resize-observer/compare/v1.0.1...HEAD
 [1.0.1]: https://github.com/pelotoncycle/resize-observer/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/pelotoncycle/resize-observer/compare/v1.0.0-alpha.1...v1.0.0
 [1.0.0-alpha.1]: https://github.com/pelotoncycle/resize-observer/compare/v1.0.0-alpha.0...v1.0.0-alpha.1
