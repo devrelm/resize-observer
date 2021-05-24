@@ -188,6 +188,28 @@ describe('ResizeObserver', () => {
             expect(callback.callCount).to.equal(2);
         });
 
+        describe('attempting to observe the same element twice', () => {
+            beforeEach(() => {
+                resizeObserver.observe(element);
+            });
+
+            it('does not observe the element a second time', () => {
+                expect(resizeObserver.$$observationTargets.length).to.equal(1);
+            });
+
+            it('only dispatches callback once', () => {
+                expect(callback.callCount).to.equal(0);
+
+                elementWidth = '10px';
+
+                mockRaf.step();
+
+                expect(callback.callCount).to.equal(1);
+                expect(callback.getCall(0).args[0].length).to.equal(1,
+                    'expect the callback to be passed one entry');
+            });
+        });
+
         describe('after unobserve', () => {
             beforeEach(() => {
                 resizeObserver.unobserve(element);
@@ -339,6 +361,54 @@ describe('ResizeObserver', () => {
             mockRaf.step();
 
             expect(callback.callCount).to.equal(1);
+        });
+
+        describe('attempting to observe the both elements twice', () => {
+            beforeEach(() => {
+                resizeObserver.observe(elements[0]);
+                resizeObserver.observe(elements[1]);
+            });
+
+            it('does not observe either element a second time', () => {
+                expect(resizeObserver.$$observationTargets.length).to.equal(2);
+            });
+
+            it('calls the callback once when the first element\'s size changed', () => {
+                expect(callback.callCount).to.equal(0);
+
+                elementWidths[0] = '10px';
+
+                mockRaf.step();
+
+                expect(callback.callCount).to.equal(1);
+                expect(callback.getCall(0).args[0].length).to.equal(1,
+                    'expect the callback to be passed one entry');
+            });
+
+            it('calls the callback once when the second element\'s size changed', () => {
+                expect(callback.callCount).to.equal(0);
+
+                elementWidths[1] = '10px';
+
+                mockRaf.step();
+
+                expect(callback.callCount).to.equal(1);
+                expect(callback.getCall(0).args[0].length).to.equal(1,
+                    'expect the callback to be passed one entry');
+            });
+
+            it('calls the callback once when both elements\' sizes have changed', () => {
+                expect(callback.callCount).to.equal(0);
+
+                elementWidths[0] = '10px';
+                elementWidths[1] = '10px';
+
+                mockRaf.step();
+
+                expect(callback.callCount).to.equal(1);
+                expect(callback.getCall(0).args[0].length).to.equal(2,
+                    'expect the callback to be passed two entries');
+            });
         });
 
         describe('after unobserving the first element', () => {
