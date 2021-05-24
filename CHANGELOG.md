@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 All minor versions less than 1.0.0 are breaking changes.
 
-## [UNRELEASED] - 2021-05-24
+## [1.0.2] - 2021-05-24
 ### Fixed
 - Fix: Enable reuse of ResizeObserver (#96)
 - Fix allowing double tracking of the first element (#94; [thgreasi](https://github.com/thgreasi))
@@ -76,7 +76,7 @@ All minor versions less than 1.0.0 are breaking changes.
 - license
 - npm package
 
-[UNRELEASED]: https://github.com/pelotoncycle/resize-observer/compare/v1.0.1...HEAD
+[1.0.2]: https://github.com/pelotoncycle/resize-observer/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/pelotoncycle/resize-observer/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/pelotoncycle/resize-observer/compare/v1.0.0-alpha.1...v1.0.0
 [1.0.0-alpha.1]: https://github.com/pelotoncycle/resize-observer/compare/v1.0.0-alpha.0...v1.0.0-alpha.1
