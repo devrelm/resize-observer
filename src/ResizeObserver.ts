@@ -52,6 +52,12 @@ class ResizeObserver {
     public disconnect() {
         this.$$observationTargets = [];
         this.$$activeTargets = [];
+        const index = resizeObservers.indexOf(this);
+        if (index < 0) {
+            return;
+        }
+        resizeObservers.splice(index, 1);
+        checkStopLoop();
     }
 }
 
