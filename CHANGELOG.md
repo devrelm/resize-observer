@@ -67,6 +67,8 @@ All minor versions less than 1.0.0 are breaking changes.
 - license
 - npm package
 
+[1.0.1]: https://github.com/pelotoncycle/resize-observer/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/pelotoncycle/resize-observer/compare/v1.0.0-alpha.1...v1.0.0
 [1.0.0-alpha.1]: https://github.com/pelotoncycle/resize-observer/compare/v1.0.0-alpha.0...v1.0.0-alpha.1
 [1.0.0-alpha.0]: https://github.com/pelotoncycle/resize-observer/compare/v0.1.1...v1.0.0-alpha.0
 [0.1.1]: https://github.com/pelotoncycle/resize-observer/compare/v0.1.0...v0.1.1
