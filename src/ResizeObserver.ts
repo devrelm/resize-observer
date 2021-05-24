@@ -20,7 +20,6 @@ class ResizeObserver {
             throw TypeError(message);
         }
         this.$$callback = callback;
-        resizeObservers.push(this);
     }
 
     public observe(target: Element) {
@@ -33,7 +32,7 @@ class ResizeObserver {
             return;
         }
         this.$$observationTargets.push(new ResizeObservation(target));
-        startLoop();
+        registerResizeObserver(this);
     }
 
     public unobserve(target: Element) {
@@ -46,16 +45,29 @@ class ResizeObserver {
             return;
         }
         this.$$observationTargets.splice(index, 1);
-        checkStopLoop();
+        if (this.$$observationTargets.length === 0) {
+            deregisterResizeObserver(this);
+        }
     }
 
     public disconnect() {
         this.$$observationTargets = [];
         this.$$activeTargets = [];
-        const index = resizeObservers.indexOf(this);
-        if (index < 0) {
-            return;
-        }
+        deregisterResizeObserver(this);
+    }
+}
+
+function registerResizeObserver(resizeObserver: ResizeObserver) {
+    const index = resizeObservers.indexOf(resizeObserver);
+    if (index < 0) {
+        resizeObservers.push(resizeObserver);
+        startLoop();
+    }
+}
+
+function deregisterResizeObserver(resizeObserver: ResizeObserver) {
+    const index = resizeObservers.indexOf(resizeObserver);
+    if (index >= 0) {
         resizeObservers.splice(index, 1);
         checkStopLoop();
     }
