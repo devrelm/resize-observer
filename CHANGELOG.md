@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 All minor versions less than 1.0.0 are breaking changes.
 
+## [1.0.1] - 2021-05-24
+### Fixed
+- Fix memory & cpu leak after `disconnect()` (#93; [thgreasi](https://github.com/thgreasi))
+
+### Chores
+- Update various dev dependencies (#25, #27, #29, #31; dependabot)
+
 ## [1.0.0] - 2018-11-28
 ### Added
 - Added `unpkg` field in `package.json`.
