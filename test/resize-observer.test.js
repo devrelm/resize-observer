@@ -78,6 +78,19 @@ describe('ResizeObserver', () => {
                 'Failed to execute \'observe\' on \'ResizeObserver\': parameter 1 is not of type \'Element\'.'
             );
         });
+
+        it('can be called with an element from another window context', () => {
+            const iframe = document.createElement('iframe');
+            document.body.appendChild(iframe);
+
+            iframe.contentWindow.document.write('<body></body>');
+            const div = iframe.contentDocument.createElement('div');
+            iframe.contentDocument.body.appendChild(div);
+
+            expect(() => {
+                resizeObserver.observe(div);
+            }).not.to.throw();
+        });
     });
 
     describe('unobserve', () => {
