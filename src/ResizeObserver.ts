@@ -86,7 +86,9 @@ function targetGuard(functionName: string, target: Element) {
     if (typeof(target) === 'undefined') {
         return `Failed to execute '${functionName}' on 'ResizeObserver': 1 argument required, but only 0 present.`;
     }
-    if (!(target instanceof (window as any).Element)) {
+    if (!(target.ownerDocument
+            && target.ownerDocument.defaultView
+            && target instanceof (target.ownerDocument.defaultView as any).Element)) {
         return `Failed to execute '${functionName}' on 'ResizeObserver': parameter 1 is not of type 'Element'.`;
     }
 }
