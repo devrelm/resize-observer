@@ -4,8 +4,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 All minor versions less than 1.0.0 are breaking changes.
 
+## [1.0.4] - 2021-11-29
+- Fix: Allow elements created in one `window` context to be observed when mounted to the DOM of another `window` context (#100)
+
 ## [1.0.3] - 2021-11-15
-- Fix: Allow elements to be observed across `window` contexts []
+- Fix: Allow elements to be observed across `window` contexts (#99)
 
 ## [1.0.2] - 2021-05-24
 ### Fixed
@@ -79,6 +82,7 @@ All minor versions less than 1.0.0 are breaking changes.
 - license
 - npm package
 
+[1.0.4]: https://github.com/pelotoncycle/resize-observer/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/pelotoncycle/resize-observer/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/pelotoncycle/resize-observer/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/pelotoncycle/resize-observer/compare/v1.0.0...v1.0.1
