@@ -82,13 +82,11 @@ function callbackGuard(callback: ResizeObserverCallback) {
     }
 }
 
-function targetGuard(functionName: string, target: Element) {
+function targetGuard(functionName: string, target: Element | null | undefined) {
     if (typeof(target) === 'undefined') {
         return `Failed to execute '${functionName}' on 'ResizeObserver': 1 argument required, but only 0 present.`;
     }
-    if (!(target.ownerDocument
-            && target.ownerDocument.defaultView
-            && target instanceof (target.ownerDocument.defaultView as any).Element)) {
+    if (!(target && target.nodeType === (window as any).Node.ELEMENT_NODE)) {
         return `Failed to execute '${functionName}' on 'ResizeObserver': parameter 1 is not of type 'Element'.`;
     }
 }
